@@ -1,2 +1,0 @@
-Username,Alias,Email,EmailEncodingKey,LanguageLocaleKey,LastName,LocaleSidKey,CommunityNickname,ProfileId,TimeZoneSidKey
-"test@salesforcedx.com.br","test","test@salesforcedx.com.br","ISO-8859-1","en_US","test","en_US","Community NickName 1","00e6A000000rB84","America/Los_Angeles"
