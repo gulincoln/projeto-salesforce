@@ -1,6 +1,6 @@
 @isTest
 private class AccountCalloutTest {
-
+    
     private static testMethod void testAccountCalloutWebServiceOk() {
         Account acc = new Account();
         User user1 = UserTestData.instance.withUserName('user1@teste.com').withCommunityNickName('nick_1').withSalesGroup('03222011').insertUser();
@@ -23,4 +23,35 @@ private class AccountCalloutTest {
 	    system.assertEquals(true, resultAccount.AddressDiscrepancy__c);
     }
     
+     private static testMethod void testAccountCalloutWebServiceEmpty() {
+        User user1 = UserTestData.instance.withUserName('user1@teste.com').withCommunityNickName('nick_1').withSalesGroup('03222011').insertUser();
+        
+        webServiceConfig__c config = WSConfigTestData.instance.withServiceName('viacep').insertWSConfig();
+        
+        Test.startTest();        
+
+        Test.setMock(HttpCalloutMock.class, WebServiceTestUtils.getInvalidMockRequest(200));
+        try{
+            Account acc = AccountTestData.instance.withSalesGroup('03222011').withBillingState('SP').withBillingCity('SJC').withBillingStreet('Rua X').withPostalCode('00000000').insertAccount();
+        }catch(Exception e){}
+        
+	    Test.stopTest();
+	    
+    }
+    
+    private static testMethod void testAccountCalloutWebServiceInvalid() {
+        User user1 = UserTestData.instance.withUserName('user1@teste.com').withCommunityNickName('nick_1').withSalesGroup('03222011').insertUser();
+        
+        webServiceConfig__c config = WSConfigTestData.instance.withServiceName('viacep').insertWSConfig();
+        
+        Test.startTest();        
+
+        Test.setMock(HttpCalloutMock.class, WebServiceTestUtils.getInvalidMockRequest(404));
+        try{
+            Account acc = AccountTestData.instance.withSalesGroup('03222011').withBillingState('SP').withBillingCity('SJC').withBillingStreet('Rua X').withPostalCode('000000001').insertAccount();
+        }catch(Exception e){}
+        
+	    Test.stopTest();
+	    
+    }
 }

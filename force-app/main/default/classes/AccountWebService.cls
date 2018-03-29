@@ -18,14 +18,18 @@ public class AccountWebService {
             req.setEndpoint(endPoint);
             
             HTTPResponse res = http.send(req);
+            
             if(res.getStatusCode() == 200){
                 AccountWebServiceHelper.Address address = (AccountWebServiceHelper.Address)JSON.deserialize(res.getBody(), AccountWebServiceHelper.Address.class); 
                 
-                if(address.erro != null) throw new AccountWebServiceException(Label.Error_Message_from_Web_Service); 
-                
+                if(address.erro != null){
+                    new AccountWebServiceException(Label.Error_Message_from_Web_Service);
+                    return;
+                } 
                 listAccountsToUpdate.add( AccountWebServiceHelper.updateAccountAddress(acc,address) );    
             }else{
-                throw new AccountWebServiceException(Label.Error_Message_from_Web_Service); 
+                new AccountWebServiceException(Label.Error_Message_from_Web_Service); 
+                return;
             }    
         }
 
